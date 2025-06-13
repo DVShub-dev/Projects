@@ -268,23 +268,24 @@ end
 -- 📍 GET EGG ROW #
 local function GetEggRowNumber(eggName)
     local eggLocations = workspace:WaitForChild("NPCS"):WaitForChild("Pet Stand"):WaitForChild("EggLocations")
-    eggName = eggName:lower()
+    eggName = eggName:lower():gsub(" ", "")
 
     local eggRowIndex = 0
 
     for i = 1, 6 do
         local row = eggLocations:FindFirstChild("Row" .. i)
-        if row and i >= 4 then -- only Row4, Row5, Row6 for eggs
+        if row and i >= 4 then
             eggRowIndex += 1
             for _, obj in ipairs(row:GetChildren()) do
-                if obj.Name:lower():find("egg") and obj.Name:lower() == eggName then
-                    return eggRowIndex -- maps Row4=1, Row5=2, Row6=3
+                local objName = obj.Name:lower():gsub(" ", "")
+                if objName:find("egg") and objName == eggName then
+                    return eggRowIndex
                 end
             end
         end
     end
 
-    return nil -- not found
+    return nil
 end
 
 local function BuyEgg(eggName)
